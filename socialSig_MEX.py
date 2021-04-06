@@ -36,7 +36,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # model = socialSigNoDrop.SocialSigNet(X=X, outDim = batchSize).to(device)
 resnet50 = models.resnet50(pretrained=True)
 model = socialSigNoDrop.scoialSigNet_NoDrop(X=X, outDim = batchSize, resnet = resnet50).to(device)
-epochs = 50
+epochs = 5
 criterion = torch.nn.MSELoss(reduction='sum')
 optimizer = torch.optim.SGD(model.parameters(), lr = lr)
 
@@ -76,3 +76,4 @@ torch.save({
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': criterion,
         }, "./trained_models/socialSig_MEX_50epochs.torch")
+

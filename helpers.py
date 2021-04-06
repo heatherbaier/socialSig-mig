@@ -10,6 +10,8 @@ import math
 
 from helpers import *
 
+import time
+
 
 def scale(x, out_range=(0, 29)):
     '''
@@ -127,6 +129,8 @@ def train_test_split(X, y, split):
 
 def train_model(model, train, val, criterion, optimizer, epochs, batchSize, device, lr):
 
+    start_time = time.perf_counter()
+
     best_mae = 9000000000000000000
     best_model_wts = deepcopy(model.state_dict())
 
@@ -199,9 +203,7 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
                         # print(d)
                         d += 1
                         
-                        if mae(y_pred, output).item() < best_mae:
-                            best_mae = mae(y_pred, output).item()
-                            best_model_wts = deepcopy(model.state_dict())
+
 
                         
                         
@@ -212,7 +214,29 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
         print("  Val:")
         print("    Loss: ", running_val_loss / d)      
         print("    MAE: ", running_val_mae / d)
+        
+
+        if (running_val_mae / d) < best_mae:
+            best_mae = (running_val_mae / d)
+            best_model_wts = deepcopy(model.state_dict())
+
+            # Save each best epoch
+            fname = "./epochs/socialSig_MEX_epoch" + str(epoch) + ".torch"
+            torch.save({
+                        'epoch': 50,
+                        'model_state_dict': model.state_dict(),
+                        'optimizer_state_dict': optimizer.state_dict(),
+                        'loss': criterion,
+                    }, fname)
+
+            print("  Saving current weights to epochs folder.")
+        
         print("\n")
+
+    end_time = time.perf_counter()
+    print("Best MAE: ", best_mae)
+    print("Training completed in: ", ((end_time - start_time) / 60) / 60, "hours.")
+    print("\n")
 
     return best_model_wts
 

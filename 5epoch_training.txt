@@ -1,0 +1,50 @@
+Epoch:  0
+  Train:
+    Loss:  331311.77488843247
+    MAE:  4.621532286042086
+  Val:
+    Loss:  350832.0143416849
+    MAE:  4.175910314709206
+  Saving current weights to epochs folder.
+
+
+Epoch:  1
+  Train:
+    Loss:  331282.457276436
+    MAE:  4.545285751578198
+  Val:
+    Loss:  350833.9528850395
+    MAE:  4.650909522470868
+
+
+Epoch:  2
+  Train:
+    Loss:  331247.68616935436
+    MAE:  4.617103284095994
+  Val:
+    Loss:  350841.3665193255
+    MAE:  4.08731844492935
+  Saving current weights to epochs folder.
+
+
+Epoch:  3
+  Train:
+    Loss:  331230.6170573082
+    MAE:  4.676949009200572
+  Val:
+    Loss:  350864.7561000864
+    MAE:  3.7673380441455326
+  Saving current weights to epochs folder.
+
+
+Epoch:  4
+  Train:
+    Loss:  331224.66829494276
+    MAE:  4.643080447306607
+  Val:
+    Loss:  350834.8315531258
+    MAE:  4.883172647905018
+
+
+Best MAE:  3.7673380441455326
+Training completed in:  11.444825913311389 hours.

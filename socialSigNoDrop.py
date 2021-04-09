@@ -97,4 +97,68 @@ class scoialSigNet_NoDrop(torch.nn.Module):
 
         return out
 
+
+
+
+
+class socialSigNet_Inception(torch.nn.Module):
+    '''
+    SocialSigNet
+    Mocks the ResNet101_32x8d architecture
+    '''
+    def __init__(self, X, outDim, inception):
+        super().__init__()
+        self.SocialSig = bilinearImputationNoDrop(X=X)      
+        self.conv1 = torch.nn.Conv2d(1, 32, kernel_size=(3,3), stride=(2, 2), bias=False)
+        self.bn1 = torch.nn.BatchNorm2d(32, eps=0.001, momentum=0.1, affine=True, track_running_stats=True)
+        self.Conv2d_2a_3x3 = inception.Conv2d_2a_3x3
+        self.Conv2d_2b_3x3 = inception.Conv2d_2b_3x3
+        self.maxpool1 = inception.maxpool1
+        self.Conv2d_3b_1x1 = inception.Conv2d_3b_1x1
+        self.Conv2d_4a_3x3 = inception.Conv2d_4a_3x3    
+        self.Mixed_5b = inception.Mixed_5b
+        self.Mixed_5c = inception.Mixed_5c
+        self.Mixed_5d = inception.Mixed_5d
+        self.Mixed_6a = inception.Mixed_6a
+        self.Mixed_6b = inception.Mixed_6b
+        self.Mixed_6c = inception.Mixed_6c
+        self.Mixed_6d = inception.Mixed_6d
+        self.Mixed_6e = inception.Mixed_6e
+        self.AuxLogits = inception.AuxLogits
+        self.Mixed_7a = inception.Mixed_7a
+        self.Mixed_7b = inception.Mixed_7b
+        self.Mixed_7c = inception.Mixed_7c
+        self.avgpool = inception.avgpool
+        self.dropout = inception.dropout
+        self.linear = torch.nn.Linear(in_features=2048, out_features=1, bias = True)
+
+    def forward(self, X):
+
+        out = self.SocialSig(X)
+        out = self.conv1(out)
+        out = self.bn1(out)
+        out = self.Conv2d_2a_3x3(out)
+        out = self.Conv2d_2b_3x3(out)
+        out = self.maxpool1(out)
+        out = self.Conv2d_3b_1x1(out)
+        out = self.Conv2d_4a_3x3(out)
+        out = self.Mixed_5b(out)
+        out = self.Mixed_5c(out)
+        out = self.Mixed_5d(out)
+        out = self.Mixed_6a(out)
+        out = self.Mixed_6b(out)
+        out = self.Mixed_6c(out)
+        out = self.Mixed_6d(out)
+        out = self.Mixed_6e(out)
+        # out = self.AuxLogits(out)
+        out = self.Mixed_7a(out)
+        out = self.Mixed_7b(out)
+        out = self.Mixed_7c(out)
+        out = self.avgpool(out)
+        out = self.dropout(out)
+        out = out.flatten(start_dim=1)
+        out = self.linear(out)
+
+        return out
+
         

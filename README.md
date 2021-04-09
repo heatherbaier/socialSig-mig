@@ -1,12 +1,13 @@
 # socialSig-mig
 
+### Current Results
 
 
-Epoch:  0
-  Train:
-    Loss:  343235.38753359026
-    MAE:  4.63747984209797
-  Val:
-    Loss:  303101.83206302015
-    MAE:  4.702779651783593
-
+|       Model	    |       MAE	     |          R2	     |  Quantity Error	|  Allocation Error  |
+|-------------------|----------------|-------------------|------------------|--------------------|
+| Decision Tree	    |              	 |              	 |                  |                    |
+| KNN	            |                |              	 |          	    |                    |
+| Random Forest	    |              	 |              	 |              	|                    |
+| Neural Network	|              	 |              	 |              	|                    |
+| socialSigNoDrop	|  3.854131323	 |  0.00007840973309 |    17167.04453	|     59915.58194    |
+| socialSign - VB	|          	     |          	     |          	    |                    |

@@ -134,6 +134,8 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
     best_mae = 9000000000000000000
     best_model_wts = deepcopy(model.state_dict())
 
+    # val_losses_plot = []
+
 
     for epoch in range(epochs):
 
@@ -155,7 +157,7 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
                         output = torch.reshape(torch.tensor(output, dtype = torch.float32, requires_grad = True), (batchSize,1))
 
                         # Forward pass
-                        y_pred = model(inputs, str(epoch) + str(c))
+                        y_pred = model(inputs)
                         loss = criterion(y_pred, output)  
                         
                         # Zero gradients, perform a backward pass, and update the weights.
@@ -194,11 +196,12 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
                         output = torch.reshape(torch.tensor(output, dtype = torch.float32, requires_grad = True), (batchSize,1))
 
                         # Forward pass
-                        y_pred = model(inputs, 1)
+                        y_pred = model(inputs)
                         loss = criterion(y_pred, output)  
 
                         running_val_mae += mae(y_pred, output).item()
                         running_val_loss += loss.item()
+                        
 
                         # print(d)
                         d += 1
@@ -221,7 +224,7 @@ def train_model(model, train, val, criterion, optimizer, epochs, batchSize, devi
             best_model_wts = deepcopy(model.state_dict())
 
             # Save each best epoch
-            fname = "./epochs/socialSig_MEX_epoch" + str(epoch) + ".torch"
+            fname = "./epochs/socialSig_MEX_20epoch" + str(epoch) + ".torch"
             torch.save({
                         'epoch': 50,
                         'model_state_dict': model.state_dict(),
@@ -249,10 +252,12 @@ def eval_model(X, y, sending, size, model, device):
     preds, ids, true_vals = [], [], []
 
     for i in range(0, len(X)):
+
+        print(i)
         
         input = torch.reshape(torch.tensor(X[i], dtype = torch.float32), size).to(device)
         model.eval()
-        pred = model(input, 1).detach().cpu().numpy()[0][0]
+        pred = model(input).detach().cpu().numpy()[0][0]
         true_val = y[i].detach().cpu().numpy()
         cur_id = sending[i]
         true_vals.append(true_val)

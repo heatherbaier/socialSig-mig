@@ -18,6 +18,17 @@
 |   Yes	   |    Weighted	| 107.8059514 |	0.4457912232  |	  196465.777	 |    54829.89573     |
 
 
+### Model Plots
+
+<img src="./model_plots/nt_w.png">
+
+<img src="./model_plots/t_w.png">
+
+<img src="./model_plots/nt_nw.png">
+
+<img src="./model_plots/t_nw.png">
+
+
 
 ### Definitions & Weights
 

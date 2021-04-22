@@ -4,4 +4,11 @@ data
 *.ipynb
 tmp.py
 trained_models
+predictions
 epochs
+
+data_for_portal.csv
+subset_for_test.csv
+mex_migration_allvars.csv
+data_for_portal_subset.csv
+mex_migration_allvars_subset.csv

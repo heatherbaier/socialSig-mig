@@ -217,4 +217,4 @@ perc_public_insurance_other_hlthcov
 perc_no_coverage_hlthcov
 perc_male
 avg_age
-number_moved
+num_persons_to_us

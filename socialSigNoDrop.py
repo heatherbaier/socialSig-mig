@@ -80,7 +80,7 @@ class scoialSigNet_NoDrop(torch.nn.Module):
         self.avgpool = resnet.avgpool
         self.linear = torch.nn.Linear(in_features=2048, out_features=1, bias = True)
 
-    def forward(self, X, epoch):
+    def forward(self, X):
 
         out = self.SocialSig(X)
         out = self.conv1(out)
@@ -95,6 +95,47 @@ class scoialSigNet_NoDrop(torch.nn.Module):
         out = out.flatten(start_dim=1)
         out = self.linear(out)
 
+        return out
+
+
+
+class scoialSigNet_NoDrop_Binary(torch.nn.Module):
+    '''
+    SocialSigNet
+    Mocks the ResNet101_32x8d architecture
+    '''
+    def __init__(self, X, outDim, resnet):
+        super().__init__()
+        self.SocialSig = bilinearImputationNoDrop(X=X)      
+        self.conv1 = torch.nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+        self.bn1 = resnet.bn1
+        self.relu = resnet.relu
+        self.maxpool = resnet.maxpool
+        self.layer1 = resnet.layer1
+        self.layer2 = resnet.layer2
+        self.layer3 = resnet.layer3
+        self.layer4 = resnet.layer4
+        self.avgpool = resnet.avgpool
+        self.fc = resnet.fc
+        self.linear = torch.nn.Linear(in_features=2048, out_features=2, bias = True)
+
+    def forward(self, X):
+
+        out = self.SocialSig(X)
+        out = self.conv1(out)
+        out = self.bn1(out)
+        out = self.relu(out)
+        out = self.maxpool(out)
+        out = self.layer1(out)
+        out = self.layer2(out)
+        out = self.layer3(out)
+        out = self.layer4(out)
+        out = self.avgpool(out)
+        # print("LENGTH AFTER AVGPOOL: ", out[0].shape)
+        out = out.flatten(start_dim=1)
+        # print("LENGTH AFTER FLATTEN: ", out[0].shape)
+        out = self.linear(out)
+        # print("LENGTH AFTER FC: ", out[0].shape)
         return out
 
 

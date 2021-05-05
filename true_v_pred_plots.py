@@ -33,7 +33,7 @@ plt.savefig("./model_plots/t_w.png")
 plt.clf()
 
 ## MEX -> US: No Transfer & Weighted
-nt_w = pd.read_csv("./new_predictions/notransfer_25epoch_weightedloss_us_preds.csv")
+nt_w = pd.read_csv("./new_predictions/notransfer_50epoch_weightedloss_us_preds.csv")
 plt.scatter(nt_w['true'], nt_w['pred'])
 # correlation_matrix = np.corrcoef(nt_nw['true'], nt_nw['pred'])
 # correlation_xy = correlation_matrix[0,1]

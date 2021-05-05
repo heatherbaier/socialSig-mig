@@ -4,6 +4,7 @@ data
 *.ipynb
 tmp.py
 trained_models
+loss_plots
 predictions
 new_trained_models
 new_predictions

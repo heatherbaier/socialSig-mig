@@ -17,26 +17,19 @@ importlib.reload(socialSigNoDrop)
 from helpers import *
 
 
-df = pd.read_csv("./us_migration_allvars.csv")
-sending = df['sending'].to_list()
-df = df.drop(['Unnamed: 0', 'sending'], axis = 1)
+df = pd.read_csv("./data/mexico2010.csv")
+sending = df['GEO2_MX'].to_list()
+df = df.drop(['Unnamed: 0', 'GEO2_MX'], axis = 1)
 df = df.fillna(0)
 df = df.apply(lambda x: pd.to_numeric(x, errors='coerce'))
-
-print(df.columns)
-
-
 with open("./us_vars.txt", "r") as f:
     vars = f.read().splitlines()
-
+vars = [i for i in vars if i in df.columns]
 df = df[vars]
 
-print(df.shape)
 
-print(df.columns)
-
-y = df['num_persons_to_us'].values
-X = df.loc[:, df.columns != "num_persons_to_us"].values
+y = df['sum_num_intmig'].values
+X = df.loc[:, df.columns != "sum_num_intmig"].values
 
 mMScale = preprocessing.MinMaxScaler()
 X = mMScale.fit_transform(X)
@@ -55,11 +48,11 @@ resnet50 = models.resnet50(pretrained=True)
 model = socialSigNoDrop.scoialSigNet_NoDrop(X=X, outDim = batchSize, resnet = resnet50).to(device)
 criterion = torch.nn.MSELoss(reduction = 'mean')
 optimizer = torch.optim.Adam(model.parameters(), lr = lr)
-checkpoint = torch.load("./trained_models/notransfer_25epoch_normalloss_us.torch")
+checkpoint = torch.load("./new_trained_models/notransfer_50epoch_normalloss_us.torch")
 model.load_state_dict(checkpoint['model_state_dict'])
 
 
 
 eval_df = eval_model(X, y, sending, (1, X[0].shape[0]), model, device)
-eval_df.to_csv("./predictions/notransfer_25epoch_normalloss_us_preds.csv")
+eval_df.to_csv("./new_predictions/notransfer_50epoch_normalloss_us_preds.csv")
 

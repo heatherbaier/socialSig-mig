@@ -5,6 +5,8 @@ data
 tmp.py
 trained_models
 predictions
+new_trained_models
+new_predictions
 epochs
 
 data_for_portal.csv

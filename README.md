@@ -2,31 +2,24 @@
 
 ## Current Results
 
-
-
-
-
-
-### Weighted Trasnfer Learning Models
+### Weighted & Non-Transfer Learning Models
 
 
 | Transfer |  Loss Function	|     MAE	  |      r2       |	 Quantity Error	 |  Allocation Error  |
 |----------|----------------|-------------|---------------|------------------|--------------------|
-|   Yes	   |     Normal	    | 193.8811298 |	0.1925204041  |	  190282.6378	 |    261654.2757     |
-|   No	   |     Normal	    | 200.3015758 |	0.1995049326  |	  351327.1716	 |    115575.8016     |
-|   No	   |    Weighted	| 94.65266588 |	0.4373283115  |	  129829.9505	 |    90805.41368     |
-|   Yes	   |    Weighted	| 107.8059514 |	0.4457912232  |	  196465.777	 |    54829.89573     |
+|   No	   |     Normal	    | 206.9039011 |	0.1518472024  |	  142023.9463	 |    340269.0472     |
+|   No	   |    Weighted	| 137.0349846 |	0.6550720991  |	  48718.29571	 |    319428.5491     |
 
 
 ### Model Plots
 
 <img src="./model_plots/nt_w.png">
 
-<img src="./model_plots/t_w.png">
+<!-- <img src="./model_plots/t_w.png"> -->
 
 <img src="./model_plots/nt_nw.png">
 
-<img src="./model_plots/t_nw.png">
+<!-- <img src="./model_plots/t_nw.png"> -->
 
 
 
@@ -45,17 +38,22 @@ Weighted = Weighted L1 Loss (Sum of absolute errors multipled by the weight of t
 		
 		
 **Weights**  
-*Number of migrants:*  |     Number      |    Weight (1/n)   |
-|----------------------|-----------------|-------------------|
-|          0	       |     1/185	     |   0.005405405405  |
-|       (0, 14)	       |     1/384	     |   0.002604166667  |
-|      (14, 198)	   |     1/1177	     |   0.000849617672  |
-|     (198, 600)	   |     1/401	     |   0.002493765586  |
-|    (600, 34582)      |	 1/183	     |   0.005464480874  |
+*Number of migrants:*  |     Number      |    Weight (1/n)         |
+|----------------------|-----------------|-------------------------|
+|          0	       |     1/51	     |   0.0196078431372549    |
+|       (0, 100)	   |     1/694	     |   0.001440922190201729  |
+|      (100, 1000)	   |     1/1481	     |   0.0006752194463200541 |
+|     (1000, max)	   |     1/105	     |   0.009523809523809525  |
 
 
 
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 **Outdated**  
@@ -68,3 +66,10 @@ Weighted = Weighted L1 Loss (Sum of absolute errors multipled by the weight of t
 | Neural Network	|              	 |              	 |              	|                    |
 | socialSigNoDrop	|  3.854131323	 |  0.00007840973309 |    17167.04453	|     59915.58194    |
 | socialSign - VB	|          	     |          	     |          	    |                    |
+
+
+
+
+|   Yes	   |     Normal	    | 193.8811298 |	0.1925204041  |	  190282.6378	 |    261654.2757     |
+|   Yes	   |    Weighted	| 107.8059514 |	0.4457912232  |	  196465.777	 |    54829.89573     |
+

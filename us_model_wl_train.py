@@ -18,60 +18,37 @@ from helpers import *
 
 
 
-df = pd.read_csv("./us_migration_allvars.csv")
-df = df.drop(['Unnamed: 0', 'sending'], axis = 1)
-df = df.fillna(0)
-df = df.apply(lambda x: pd.to_numeric(x, errors='coerce'))
 
-with open("./us_vars.txt", "r") as f:
-    vars = f.read().splitlines()
-df = df[vars]
-
-
-
-
-print("CLASS 0: ", len(df[(df['num_persons_to_us'] == 0)]))
-print("CLASS 1: ", len(df[(df['num_persons_to_us'] > 0) & (df['num_persons_to_us'] < 14)]))
-print("CLASS 2: ", len(df[(df['num_persons_to_us'] >= 14) & (df['num_persons_to_us'] < 198)]))
-print("CLASS 3: ", len(df[(df['num_persons_to_us'] >= 198) & (df['num_persons_to_us'] < 600)]))
-print("CLASS 4: ", len(df[(df['num_persons_to_us'] >= 600) & (df['num_persons_to_us'] < 34582.000000)]))
-
-weights = {"0" : 1/185, "1": 1/384, "2": 1/1177, "3": 1/401, "4": 1/183}
-
+weights = {'0': 1/51, '1': 1/694, '2': 1/1481, '3': 1/105}
 
 def classify_migration(x):
     if x == 0:
-        return weights["0"]
-        # return 0
-    elif x > 0 and x < 14:
-        return weights["1"]
-        # return 1
-    elif x >= 14 and x < 198:
-        return weights["1"]
-        # return 2
-    elif x >= 198 and x < 600:
-        return weights["2"]
-        # return 3
+        return weights['0']
+    elif (x > 0) & (x < 100):
+        return weights['1']
+    elif (x >= 100) & (x < 1000):
+        return weights['2']
     else:
-        return weights["3"]
-        # return 4
+        return weights['3']
 
 
+df = pd.read_csv("./data/mexico2010.csv")
+df = df.drop(['Unnamed: 0', 'GEO2_MX'], axis = 1)
+df = df.fillna(0)
+df = df.apply(lambda x: pd.to_numeric(x, errors='coerce'))
+with open("./us_vars.txt", "r") as f:
+    vars = f.read().splitlines()
+vars = [i for i in vars if i in df.columns]
+df = df[vars]
 
-df['weight'] = df['num_persons_to_us'].apply(lambda x: classify_migration(x))
 
-print(df['weight'].value_counts())
-
+df['weight'] = df['sum_num_intmig'].apply(lambda x: classify_migration(x))
 w = df['weight'].values
-
-
 df = df.drop(['weight'], axis = 1)
 
-print(df.columns)
 
-
-y = df['num_persons_to_us'].values
-X = df.loc[:, df.columns != "num_persons_to_us"].values
+y = df['sum_num_intmig'].values
+X = df.loc[:, df.columns != "sum_num_intmig"].values
 
 mMScale = preprocessing.MinMaxScaler()
 X = mMScale.fit_transform(X)
@@ -83,20 +60,20 @@ lr = 1e-4
 # lr = 1e-6
 # lr = 1e-8
 batchSize = 16
-epochs = 25
+epochs = 50
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # model = socialSigNoDrop.SocialSigNet(X=X, outDim = batchSize).to(device)
 resnet50 = models.resnet50(pretrained=True)
 model = socialSigNoDrop.scoialSigNet_NoDrop(X=X, outDim = batchSize, resnet = resnet50).to(device)
 criterion = torch.nn.MSELoss(reduction = 'mean')
 optimizer = torch.optim.Adam(model.parameters(), lr = lr)
-checkpoint = torch.load("./trained_models/socialSig_MEX_10epochs_AdamLoss.torch")
-model.load_state_dict(checkpoint['model_state_dict'])
+# checkpoint = torch.load("./trained_models/socialSig_MEX_10epochs_AdamLoss.torch")
+# model.load_state_dict(checkpoint['model_state_dict'])
 
 
 
 
-x_train, y_train, x_val, y_val, w_train, w_val = train_test_split(X, y, w, .80)
+x_train, y_train, x_val, y_val, w_train, w_val = train_test_split_weighted(X, y, w, .80)
 
 print("x_train: ", len(x_train))
 print("y_train: ", len(y_train))
@@ -137,11 +114,11 @@ model_wts, val_losses_plot = train_weighted_model(model, train, val, criterion, 
 
 model.load_state_dict(model_wts)
 torch.save({
-            'epoch': 20,
+            'epoch': 50,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
             'loss': criterion,
-        }, "./trained_models/transfer_25epoch_weightedloss_us.torch")
+        }, "./new_trained_models/notransfer_50epoch_weightedloss_us.torch")
 
 
 
@@ -150,4 +127,4 @@ torch.save({
 print(val_losses_plot)
 
 plt.plot([i for i in range(0, epochs)], val_losses_plot)
-plt.savefig(("./transfer_25epoch_weightedloss_us.png"))
+plt.savefig(("./new_loss_plots/notransfer_50epoch_weightedloss_us.png"))

@@ -435,7 +435,10 @@ def train_weighted_model(model, train, val, criterion, optimizer, epochs, batchS
 
                         # Forward pass
                         y_pred = model(inputs)
+                        # print(y_pred)
                         loss = weighted_loss(y_pred, output, weights)  
+
+                        # print(output)
 
                         # print(loss) 
 

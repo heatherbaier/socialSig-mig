@@ -11,6 +11,7 @@ epochs
 vars.txt
 wl_training.txt
 nl_training.txt
+5epoch_training.txt
 us_migration_allvars.csv
 
 data_for_portal.csv

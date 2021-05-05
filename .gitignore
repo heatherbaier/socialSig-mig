@@ -8,6 +8,10 @@ predictions
 new_trained_models
 new_predictions
 epochs
+vars.txt
+wl_training.txt
+nl_training.txt
+us_migration_allvars.csv
 
 data_for_portal.csv
 subset_for_test.csv

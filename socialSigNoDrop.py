@@ -21,7 +21,7 @@ class bilinearImputation(torch.nn.Module):
     def __init__(self, X):
         super(bilinearImputation, self).__init__()
         self.W = torch.nn.Parameter(torch.tensor(np.arange(0, X.shape[1]), dtype = torch.float32, requires_grad=True))
-        self.outDim = [224,224]
+        self.outDim = [256, 256]
         self.inDim = math.ceil(math.sqrt(X.shape[1]))
 
     def forward(self, batchX):
@@ -64,7 +64,6 @@ class bilinearImputationNoDrop(torch.nn.Module):
 class scoialSigNet_NoDrop(torch.nn.Module):
     '''
     SocialSigNet
-    Mocks the ResNet101_32x8d architecture
     '''
     def __init__(self, X, outDim, resnet):
         super().__init__()
@@ -78,7 +77,12 @@ class scoialSigNet_NoDrop(torch.nn.Module):
         self.layer3 = resnet.layer3
         self.layer4 = resnet.layer4
         self.avgpool = resnet.avgpool
-        self.linear = torch.nn.Linear(in_features=2048, out_features=1, bias = True)
+        # self.linear = torch.nn.Linear(in_features=2048, out_features=1, bias = True)
+
+        self.linear1 = torch.nn.Linear(2048, 128)
+        self.linear2 = torch.nn.Linear(128, 64)
+        self.linear3 = torch.nn.Linear(64, 32)
+        self.linear4 = torch.nn.Linear(32, 1)
 
     def forward(self, X):
 
@@ -93,7 +97,15 @@ class scoialSigNet_NoDrop(torch.nn.Module):
         out = self.layer4(out)
         out = self.avgpool(out)
         out = out.flatten(start_dim=1)
-        out = self.linear(out)
+        # out = self.linear(out)
+
+        out = self.linear1(out)
+        out = self.relu(out)
+        out = self.linear2(out)
+        out = self.relu(out)
+        out = self.linear3(out)
+        out = self.relu(out)
+        out = self.linear4(out)
 
         return out
 

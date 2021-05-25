@@ -67,10 +67,10 @@ resnet50 = models.resnet50(pretrained=True)
 model = socialSigNoDrop.scoialSigNet_NoDrop(X=X, outDim = batchSize, resnet = resnet50).to(device)
 criterion = torch.nn.MSELoss(reduction = 'mean')
 optimizer = torch.optim.Adam(model.parameters(), lr = lr)
-checkpoint = torch.load("./new_trained_models/notransfer_50epoch_weightedloss_us.torch")
+checkpoint = torch.load("./new_trained_models/best_model_wts_loss_200epochs.torch")
 model.load_state_dict(checkpoint['model_state_dict'])
 
 
 
 eval_df = eval_model(X, y, sending, (1, X[0].shape[0]), model, device)
-eval_df.to_csv("./new_predictions/notransfer_50epoch_weightedloss_us_preds.csv")
+eval_df.to_csv("./new_predictions/best_model_wts_loss_200epochs.csv")

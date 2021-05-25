@@ -220,6 +220,7 @@ avg_age
 num_persons_to_us
 
 
+GEO2_MX
 
 
 perc_households_gq
